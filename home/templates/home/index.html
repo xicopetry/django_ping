@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>PING TESTER!</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{% static "favicon.ico" %}">
+  <link href="{% static "bootstrap513/css/bootstrap.min.css" %}" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <div class='container'>
+    <div class='row'>
+      <h1 class='m-4'>PING TESTER!</h1>
+    </div>
+    <div class='row'>
+      <div class="col">
+        <button class="btn btn-primary float-end m-2"  onclick="update_all()">
+          Test all!
+        </button>
+      </div>
+
+    </div>
+    <div class='row'>
+      <table id="hosts-table" class="table table-striped table-bordered mb-5">
+        <tr>
+          <th>Host name</th>
+          <th>Address</th>
+          <th>Status</th>
+          <th>Time avg</th>
+          <th>Packets_lost(2)</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+        {% for host in hosts_list %}
+          <tr id="{{host.pk}}">
+            <td>{{host.name}}</td>
+            <td>{{host.ip_address}}</td>
+            <td>
+              {% if host.status == 1 %}
+                OK
+              {% else %}
+              <span>&#128308;</span>
+              {% endif %}
+            </td>
+            <td>{{host.rtt_avg_ms}}ms</td>
+            <td>{{host.packets_lost}}</td>
+            <td>{{host.formated_date}}</td>
+            <td>  <button type="button" class="btn btn-outline-info w-75" onclick="update_ping( {{host.pk}} )"> PING </button> </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <script src= "{% static "jquery/jquery-3.3.1.min.js" %}"></script>
+  <script>
+
+      function update_ping(pk){
+        let sel = "#" + pk;
+        let button = $(sel).find('button');
+        $.ajax({
+            type: 'GET',
+            url: "/get/ajax/update_ping",
+            data: {"pk": pk},
+            beforeSend: function () {
+              button.prop("disabled", true);
+              button[0].innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+            },
+            success: function (response) {
+              let status = 'OK';
+              if (response['status'] == '0'){
+                status = '<span>&#128308;</span>'
+              }
+              $(sel).html("<td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td> <button type='button' class='btn btn-outline-info w-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
+
+            },
+
+            error: function (response) {
+                console.log(response)
+            },
+
+            complete: function () {
+              button.prop("disabled", false);
+              button[0].innerHTML = 'PING';
+            },
+
+        })
+      };
+
+      function update_all(){
+
+        hosts_table = document.getElementById('hosts-table')
+        for (let i = 1; i < hosts_table.rows.length; i++) {
+          // iterate through all rows and 'click' the buttons
+          tr = hosts_table.rows[i]
+          td = tr.lastElementChild
+          td.firstElementChild.click()
+        }
+
+      }
+
+  </script>
+
+
+
+
+</body>
+
+</html>
