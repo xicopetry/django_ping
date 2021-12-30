@@ -6,6 +6,13 @@ from pythonping import ping
 COUNT = 2
 
 
+class HostType(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Host(models.Model):
     name = models.CharField(max_length=100)
     ip_address = models.GenericIPAddressField()
@@ -13,6 +20,7 @@ class Host(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     rtt_avg_ms = models.FloatField(null=True, blank=True)
     packets_lost = models.IntegerField(null=True, blank=True)
+    host_type = models.ForeignKey(HostType, null=True, on_delete=models.SET_NULL, help_text='The host type can be a Desktop, Antenna, Router, AP, Switch...')
 
     def __str__(self):
         return f'{self.name} - {self.ip_address}'
@@ -28,4 +36,5 @@ class Host(models.Model):
 
     @property
     def formated_date(self):
-        return self.date.strftime('%b %d %Y %H:%M:%S')
+        if self.date:
+            return self.date.strftime('%b %d %Y %H:%M:%S')

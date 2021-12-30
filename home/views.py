@@ -7,7 +7,7 @@ from home.models import Host
 
 def index(request):
     context = {}
-    context['hosts_list'] = Host.objects.all()
+    context['hosts'] = Host.objects.all().order_by('host_type')
     return render(request, 'home/index.html', context)
 
 
@@ -22,5 +22,6 @@ def update_ping(request):
         'rtt_avg': host.rtt_avg_ms,
         'packets_lost': host.packets_lost,
         'date': host.formated_date,
+        'host_type': host.host_type.name,
     }
     return JsonResponse(response, status=200)

@@ -1,0 +1,52 @@
+version: "3.9"
+
+networks:
+  ru-network:
+    external: true
+
+services:
+  django:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./redeunida.portal:/sites/redeunida.portal/
+    networks:
+      - ru-network
+    depends_on:
+      - "redis"
+      - "mysqlsrv"
+      - "psqlsrv"
+  
+  redis:
+    image: "redis:alpine"
+    networks:
+      - ru-network
+
+  mysqlsrv:
+    image: mysql:5.7
+    environment:
+      MYSQL_USER: "ocs2"
+      MYSQL_ROOT_PASSWORD: "SenhaDeTesteMYSQL"
+      MYSQL_DATABASE: "ocs2"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
+      - ./docker/init_mysql.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ru-network
+  
+  psqlsrv:
+    image: postgres:9.6.23 #TODO Verrificar qual a versao no servidor
+    restart: always
+    environment:
+      POSTGRES_USER: "redeunida"
+      POSTGRES_DB: "redeunidaportal"
+      POSTGRES_PASSWORD: "SenhaDeTestePSQL"
+    ports:
+      - "5432:5432"
+    volumes:
+    - ./docker/init_psql.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ru-network

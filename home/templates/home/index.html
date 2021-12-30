@@ -31,6 +31,7 @@
     <div class='row'>
       <table id="hosts-table" class="table table-striped table-bordered mb-5">
         <tr>
+          <th>Type</th>
           <th>Host name</th>
           <th>Address</th>
           <th>Status</th>
@@ -39,8 +40,9 @@
           <th>Date</th>
           <th></th>
         </tr>
-        {% for host in hosts_list %}
+        {% for host in hosts %}
           <tr id="{{host.pk}}">
+            <td>{{host.host_type}}</td>
             <td>{{host.name}}</td>
             <td>{{host.ip_address}}</td>
             <td>
@@ -79,7 +81,7 @@
               if (response['status'] == '0'){
                 status = '<span>&#128308;</span>'
               }
-              $(sel).html("<td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td> <button type='button' class='btn btn-outline-info w-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
+              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td> <button type='button' class='btn btn-outline-info w-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
 
             },
 
