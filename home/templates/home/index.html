@@ -55,7 +55,7 @@
             <td>{{host.rtt_avg_ms}}ms</td>
             <td>{{host.packets_lost}}</td>
             <td>{{host.formated_date}}</td>
-            <td>  <button type="button" class="btn btn-outline-info w-75" onclick="update_ping( {{host.pk}} )"> PING </button> </td>
+            <td style='text-align:center'> <button type="button" class="btn btn-outline-info mw-75" onclick="update_ping( {{host.pk}} )"> PING </button> </td>
           </tr>
         {% endfor %}
       </table>
@@ -81,7 +81,7 @@
               if (response['status'] == '0'){
                 status = '<span>&#128308;</span>'
               }
-              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td> <button type='button' class='btn btn-outline-info w-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
+              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td style='text-align:center'> <button type='button' class='btn btn-outline-info mw-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
 
             },
 
