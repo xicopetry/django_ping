@@ -42,9 +42,9 @@ class Host(models.Model):
     @property
     def formated_date(self):
         if self.date:
-            return self.date.strftime('%b %d %Y %H:%M:%S')
+            return self.date.strftime('%d/%m/%Y %H:%M:%S')
     
     @property
     def formated_last_date_alive(self):
         if self.last_date_alive:
-            return self.last_date_alive.strftime('%b %d %Y %H:%M:%S')
+            return self.last_date_alive.strftime('%d/%m/%Y %H:%M:%S')
