@@ -7,6 +7,7 @@ from home.models import HostType, Host
 class HostAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'ip_address', 'status', 'date', 'rtt_avg_ms', 'packets_lost', 'host_type')
+    list_filter = ('host_type', 'status')
 
 
 @admin.register(HostType)

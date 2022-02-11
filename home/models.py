@@ -18,6 +18,7 @@ class Host(models.Model):
     ip_address = models.GenericIPAddressField()
     status = models.BooleanField(null=True, blank=True)
     date = models.DateTimeField(null=True, blank=True)
+    last_date_alive = models.DateTimeField(null=True, blank=True)
     rtt_avg_ms = models.FloatField(null=True, blank=True)
     packets_lost = models.IntegerField(null=True, blank=True)
     host_type = models.ForeignKey(HostType, null=True, on_delete=models.SET_NULL, help_text='The host type can be a Desktop, Antenna, Router, AP, Switch...')
@@ -32,9 +33,18 @@ class Host(models.Model):
         self.status = result.success(option=2)
         self.rtt_avg_ms = result.rtt_avg_ms
         self.packets_lost = int(result.packets_lost * COUNT)
+        
+        if self.status:
+            self.last_date_alive = self.date
+        
         self.save()
 
     @property
     def formated_date(self):
         if self.date:
             return self.date.strftime('%b %d %Y %H:%M:%S')
+    
+    @property
+    def formated_last_date_alive(self):
+        if self.last_date_alive:
+            return self.last_date_alive.strftime('%b %d %Y %H:%M:%S')

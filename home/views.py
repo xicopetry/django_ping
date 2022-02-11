@@ -22,6 +22,7 @@ def update_ping(request):
         'rtt_avg': host.rtt_avg_ms,
         'packets_lost': host.packets_lost,
         'date': host.formated_date,
+        'last_date_alive' : host.formated_last_date_alive,
         'host_type': host.host_type.name,
     }
     return JsonResponse(response, status=200)
