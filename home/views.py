@@ -7,7 +7,7 @@ from home.models import Host
 
 def index(request):
     context = {}
-    context['hosts'] = Host.objects.all().order_by('host_type')
+    context['hosts'] = Host.objects.all().order_by('acknowledged', 'host_type')
     return render(request, 'home/index.html', context)
 
 

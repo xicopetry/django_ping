@@ -42,7 +42,7 @@
           <th></th>
         </tr>
         {% for host in hosts %}
-          <tr id="{{host.pk}}">
+          <tr id="{{host.pk}}" {% if host.acknowledged %} style="background-color: bisque;" {% endif %}>
             <td>{{host.host_type}}</td>
             <td>{{host.name}}</td>
             <td>{{host.ip_address}}</td>

@@ -14,14 +14,15 @@ class HostType(models.Model):
 
 
 class Host(models.Model):
-    name = models.CharField(max_length=100)
-    ip_address = models.GenericIPAddressField()
-    status = models.BooleanField(null=True, blank=True)
-    date = models.DateTimeField(null=True, blank=True)
+    name            = models.CharField(max_length=100)
+    ip_address      = models.GenericIPAddressField()
+    status          = models.BooleanField(null=True, blank=True)
+    date            = models.DateTimeField(null=True, blank=True)
     last_date_alive = models.DateTimeField(null=True, blank=True)
-    rtt_avg_ms = models.FloatField(null=True, blank=True)
-    packets_lost = models.IntegerField(null=True, blank=True)
-    host_type = models.ForeignKey(HostType, null=True, on_delete=models.SET_NULL, help_text='The host type can be a Desktop, Antenna, Router, AP, Switch...')
+    rtt_avg_ms      = models.FloatField(null=True, blank=True)
+    packets_lost    = models.IntegerField(null=True, blank=True)
+    host_type       = models.ForeignKey(HostType, null=True, on_delete=models.SET_NULL, help_text='The host type can be a Desktop, Antenna, Router, AP, Switch...')
+    acknowledged    = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.name} - {self.ip_address}'
