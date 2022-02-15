@@ -24,6 +24,9 @@ class Host(models.Model):
     host_type       = models.ForeignKey(HostType, null=True, on_delete=models.SET_NULL, help_text='The host type can be a Desktop, Antenna, Router, AP, Switch...')
     acknowledged    = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['host_type']
+
     def __str__(self):
         return f'{self.name} - {self.ip_address}'
     
