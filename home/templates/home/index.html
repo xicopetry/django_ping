@@ -39,29 +39,43 @@
           <th>Lost(2)</th>
           <th>Date</th>
           <th>Last Date Alive</th>
-          <th style="width: 69px;"></th>
+          <th style="width: 79px;"></th>
         </tr>
         {% for host in hosts %}
           <tr id="{{host.pk}}" {% if host.acknowledged %} style="background-color: bisque;" {% endif %}>
+            
             <td>{{host.host_type}}</td>
+            
             <td>{{host.name}}</td>
+            
             <td>{{host.ip_address}}</td>
+            
             <td style='text-align:center;'>
               {% if host.status == 1 %}
                 OK
               {% else %}
-              <span>&#128308;</span>
+                <span>&#128308;</span>
               {% endif %}
             </td>
+            
             <td>{{host.rtt_avg_ms}}ms</td>
+            
             <td>{{host.packets_lost}}</td>
+            
             <td style='font-size: 0.7rem;'>{{host.formated_date}}</td>
-            <td style='font-size: 0.7rem;'>{{host.formated_last_date_alive}}</td>
+            
+            <td style='font-size: 0.7rem;'>
+              {% if host.last_date_alive %}
+                {{host.formated_last_date_alive}}
+              {% endif %}
+              </td>
+
             <td style='text-align:center;'>
               <button style='font-size: 0.7rem;' type="button" class="btn btn-outline-info mw-75 fw-light" onclick="update_ping( {{host.pk}} )">
                 PING
               </button>
             </td>
+
           </tr>
         {% endfor %}
       </table>
@@ -72,8 +86,9 @@
   <script>
 
       function update_ping(pk){
-        let sel = "#" + pk;
-        let button = $(sel).find('button');
+        let selpk = "#" + pk;
+        let button = $(selpk).find('button');
+        let sel = $(selpk)[0];
         $.ajax({
             type: 'GET',
             url: "/get/ajax/update_ping",
@@ -87,8 +102,14 @@
               if (response['status'] == '0'){
                 status = '<span>&#128308;</span>'
               }
-              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td style='text-align:center;'>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td style='font-size: 0.7rem;'>"+ response['date'] +"</td> <td style='font-size: 0.7rem;'>"+ response['last_date_alive'] +"</td> <td style='text-align:center'> <button style='font-size: 0.7rem;' type='button' class='btn btn-outline-info mw-75 fw-light' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
-
+              sel.cells[0].innerText = response['host_type'];
+              sel.cells[1].innerText = response['name'];
+              sel.cells[2].innerText = response['ip_address'];
+              sel.cells[3].html      = status;
+              sel.cells[4].innerText = response['rtt_avg'] + "ms";
+              sel.cells[5].innerText = response['packets_lost'];
+              sel.cells[6].innerText = response['date'];
+              sel.cells[7].innerText = response['last_date_alive'];
             },
 
             error: function (response) {
