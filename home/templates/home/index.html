@@ -29,24 +29,24 @@
 
     </div>
     <div class='row'>
-      <table id="hosts-table" class="table table-striped table-bordered mb-5">
+      <table id="hosts-table" class="table table-sm table-striped table-bordered mb-5 align-middle">
         <tr>
           <th>Type</th>
           <th>Host name</th>
           <th>Address</th>
           <th>Status</th>
-          <th>Time avg</th>
-          <th>Packets_lost(2)</th>
+          <th>Time</th>
+          <th>Lost(2)</th>
           <th>Date</th>
           <th>Last Date Alive</th>
-          <th></th>
+          <th style="width: 69px;"></th>
         </tr>
         {% for host in hosts %}
           <tr id="{{host.pk}}" {% if host.acknowledged %} style="background-color: bisque;" {% endif %}>
             <td>{{host.host_type}}</td>
             <td>{{host.name}}</td>
             <td>{{host.ip_address}}</td>
-            <td>
+            <td style='text-align:center;'>
               {% if host.status == 1 %}
                 OK
               {% else %}
@@ -55,9 +55,13 @@
             </td>
             <td>{{host.rtt_avg_ms}}ms</td>
             <td>{{host.packets_lost}}</td>
-            <td>{{host.formated_date}}</td>
-            <td>{{host.formated_last_date_alive}}</td>
-            <td style='text-align:center'> <button type="button" class="btn btn-outline-info mw-75" onclick="update_ping( {{host.pk}} )"> PING </button> </td>
+            <td style='font-size: 0.7rem;'>{{host.formated_date}}</td>
+            <td style='font-size: 0.7rem;'>{{host.formated_last_date_alive}}</td>
+            <td style='text-align:center;'>
+              <button style='font-size: 0.7rem;' type="button" class="btn btn-outline-info mw-75 fw-light" onclick="update_ping( {{host.pk}} )">
+                PING
+              </button>
+            </td>
           </tr>
         {% endfor %}
       </table>
@@ -76,14 +80,14 @@
             data: {"pk": pk},
             beforeSend: function () {
               button.prop("disabled", true);
-              button[0].innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+              button[0].innerHTML = '<span style="width: 0.8rem; height: 0.8rem;" class="spinner-border spinner-border-sm text-warning" role="status" aria-hidden="true"></span>';
             },
             success: function (response) {
               let status = 'OK';
               if (response['status'] == '0'){
                 status = '<span>&#128308;</span>'
               }
-              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td>"+ response['date'] +"</td> <td>"+ response['last_date_alive'] +"</td> <td style='text-align:center'> <button type='button' class='btn btn-outline-info mw-75' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
+              $(sel).html("<td>"+ response['host_type'] +"</td> <td>"+ response['name'] +"</td> <td>"+ response['ip_address'] +"</td> <td style='text-align:center;'>"+ status +"</td> <td>"+ response['rtt_avg'] +"ms </td> <td>"+ response['packets_lost'] +"</td> <td style='font-size: 0.7rem;'>"+ response['date'] +"</td> <td style='font-size: 0.7rem;'>"+ response['last_date_alive'] +"</td> <td style='text-align:center'> <button style='font-size: 0.7rem;' type='button' class='btn btn-outline-info mw-75 fw-light' onclick=\"update_ping(" + pk + ")\"> PING </button> </td>")
 
             },
 
