@@ -100,8 +100,8 @@
             success: function (response) {
               let status = 'OK';
               if (response['status'] == '0'){
-                status = '<span>&#128308;</span>'
-              }
+                status = '<span>&#128308;</span>';
+              };
               sel.cells[0].innerText = response['host_type'];
               sel.cells[1].innerText = response['name'];
               sel.cells[2].innerText = response['ip_address'];
